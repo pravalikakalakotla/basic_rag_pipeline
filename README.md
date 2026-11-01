@@ -1,141 +1,165 @@
 # Basic RAG Pipeline
 
+A beginner-friendly Retrieval-Augmented Generation (RAG) system that answers questions using information stored in personal documents. It combines semantic search with a Large Language Model (LLM) to generate context-based answers.
+
 ## Project Overview
 
-This project implements a Basic Retrieval-Augmented Generation (RAG) pipeline using Python, Sentence Transformers, ChromaDB, and Groq.
+This project implements a basic RAG pipeline using Python, Sentence Transformers, ChromaDB, and Groq.
 
-The system allows users to ask questions about their own documents. It retrieves relevant information from the documents and uses a Large Language Model (LLM) to generate context-based answers.
+The system reads documents, splits them into smaller overlapping chunks, converts the chunks into vector embeddings, and stores them in ChromaDB.
 
-## Features
-
-- Reads text documents from a local folder.
-- Splits documents into overlapping text chunks.
-- Generates embeddings using Sentence Transformers.
-- Stores embeddings in ChromaDB.
-- Retrieves relevant document chunks using semantic similarity.
-- Generates answers using the Groq API.
-- Avoids answering questions when the required information is not available in the documents.
+When a user asks a question, the system retrieves the most relevant chunks and passes them as context to the Groq LLM to generate an answer.
 
 ## Technologies Used
 
-- Python 3.11
+- Python
 - Sentence Transformers
 - ChromaDB
 - Groq API
-- tiktoken
-- python-dotenv
+- all-MiniLM-L6-v2 (Embedding Model)
+- Tiktoken
+- PyPDF
+- Python-dotenv
 
 ## Project Structure
 
 ```text
-basic-rag-pipeline/
+basic_rag_pipeline/
 │
 ├── documents/
 │   ├── customer_churn.txt
 │   ├── federated_learning.txt
-│   ├── python_notes.txt
+│   ├── internship_notes.txt
 │   ├── java_notes.txt
-│   └── internship_notes.txt
+│   └── python_notes.txt
 │
-├── chroma_db/
-├── venv/
-├── .env
+├── chroma_db/          # Created locally during ingestion
+├── venv/               # Local Python virtual environment
+├── .env                # Stores the Groq API key
 ├── .gitignore
 ├── chunking.py
 ├── ingest.py
 ├── rag_pipeline.py
+├── requirements.txt
 ├── test_chunking.py
 ├── test_retrieval.py
 ├── test_similarity.py
-├── README.md
-└── requirements.txt
+└── README.md
 ```
 
-## RAG Pipeline Architecture
+**Note:** The `venv/`, `.env`, and `chroma_db/` folders or files are created and used locally. They are excluded from the public GitHub repository through `.gitignore`.
 
-1. Document Loading – Reads text documents.
-2. Text Chunking – Splits documents into chunks of 400 tokens with 50-token overlap.
-3. Embedding Generation – Converts text chunks into numerical vectors using `all-MiniLM-L6-v2`.
-4. Vector Storage – Stores document chunks, embeddings, and metadata in ChromaDB.
-5. Similarity Search – Retrieves relevant chunks for a user question.
-6. Answer Generation – Sends the retrieved context to Groq to generate an answer.
+## How It Works
+
+1. **Document Collection:** Collects text documents from the documents folder.
+2. **Text Chunking:** Splits documents into smaller chunks using a chunk size of 400 tokens and an overlap of 50 tokens.
+3. **Embedding Generation:** Uses the all-MiniLM-L6-v2 model to convert text chunks into vector embeddings.
+4. **Vector Storage:** Stores embeddings and their corresponding text chunks in a local ChromaDB database.
+5. **Question Embedding:** Converts the user's question into a vector embedding.
+6. **Retrieval:** Retrieves the top 4 most similar chunks from ChromaDB.
+7. **Relevance Filtering:** Uses a distance threshold to filter out less relevant chunks.
+8. **Answer Generation:** Sends the relevant context and user question to the Groq LLM to generate an answer.
 
 ## Installation and Setup
 
-### 1. Clone the repository
+### 1. Clone the Repository
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
-cd basic-rag-pipeline
+git clone https://github.com/pravalikakalakotla/basic_rag_pipeline.git
+cd basic_rag_pipeline
 ```
 
-### 2. Create a virtual environment
+### 2. Create a Virtual Environment
 
 ```bash
 python -m venv venv
 ```
 
-### 3. Activate the environment
-
-Windows PowerShell:
+Activate it on Windows:
 
 ```powershell
-.\venv\Scripts\Activate.ps1
+venv\Scripts\activate
 ```
 
-### 4. Install dependencies
+### 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 5. Configure the Groq API key
+### 4. Configure the Groq API Key
 
-Create a `.env` file in the project directory:
+Create a `.env` file in the project root directory and add:
 
 ```env
 GROQ_API_KEY=your_groq_api_key
 ```
 
-Never upload your API key to GitHub.
+Replace `your_groq_api_key` with your own Groq API key.
 
-### 6. Add documents
+**Important:** Never upload your `.env` file or expose your API key publicly.
 
-Place your `.txt` documents inside the `documents` folder.
-
-### 7. Run document ingestion
+### 5. Run Document Ingestion
 
 ```bash
 python ingest.py
 ```
 
-### 8. Start the RAG pipeline
+This reads the documents, generates embeddings, and stores them in ChromaDB.
+
+### 6. Run the RAG Pipeline
 
 ```bash
 python rag_pipeline.py
 ```
 
-Ask questions through the terminal. Type `exit` to close the application.
+Enter your questions in the terminal and receive answers based on the stored documents.
+
+Type `exit` to stop the application.
+
+## Example Questions
+
+- What is Federated Learning and how does it work?
+- Explain my Customer Churn Prediction project.
+- What is quantum computing?
+
+If relevant information is not available in the stored documents, the system returns:
+
+`I don't have enough information in the documents.`
 
 ## Testing
 
-The pipeline was tested using questions about:
+The project includes separate testing scripts:
 
-- Federated Learning for Privacy Preserving Healthcare.
-- Customer Churn Prediction.
-- Python and Java programming.
-- RAG concepts.
+- `test_chunking.py` – Tests the document chunking process.
+- `test_retrieval.py` – Checks document retrieval from ChromaDB.
+- `test_similarity.py` – Tests semantic similarity and relevance ranking.
 
-An out-of-scope question about quantum computing was also tested. The system correctly indicated that the information was unavailable in its documents.
+## Key Features
+
+- Document-based question answering.
+- Semantic search using vector embeddings.
+- Local vector storage with ChromaDB.
+- Context-based answer generation using Groq.
+- Retrieval of the top 4 relevant chunks.
+- Distance-based relevance filtering.
+- Displays retrieved chunks with source information.
+- Handles questions when relevant information is unavailable.
 
 ## Future Improvements
 
-- Support PDF and other document formats.
-- Improve chunking and retrieval strategies.
-- Build a Streamlit-based user interface.
-- Add conversation history.
-- Improve source citations and retrieval accuracy.
+- Support for PDF and DOCX document formats.
+- Improved chunking strategies.
+- Conversation memory for follow-up questions.
+- Agentic RAG with query planning and tool usage.
+- Web-based user interface.
 
 ## Author
 
-Developed as a hands-on project to understand and implement Retrieval-Augmented Generation.
+**Pravalika Kalakotla**
+
+GitHub: https://github.com/pravalikakalakotla
+
+## License
+
+This project is open-source and available for learning and educational purposes.

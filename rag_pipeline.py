@@ -26,40 +26,67 @@ embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 client = chromadb.PersistentClient(path="chroma_db")
 collection = client.get_collection(name="rag_documents")
 
+# 5. Distance threshold
+DISTANCE_THRESHOLD = 1.2
 
-def answer_question(question):
 
-    # 5. Convert question into embedding
+# 6. Main RAG query function
+def query(question):
+
+    # Convert question into embedding
     question_embedding = embedding_model.encode(
         [question]
     ).tolist()
 
-    # 6. Retrieve relevant chunks
+    # Retrieve top 4 relevant chunks
     results = collection.query(
         query_embeddings=question_embedding,
         n_results=4,
-        include=["documents", "metadatas"]
+        include=["documents", "metadatas", "distances"]
     )
 
-    # 7. Prepare context
     context_parts = []
 
-    for document, metadata in zip(
-        results["documents"][0],
-        results["metadatas"][0]
+    print("\n========== RETRIEVED CHUNKS ==========")
+
+    # Filter and display relevant chunks
+    for i, (document, metadata, distance) in enumerate(
+        zip(
+            results["documents"][0],
+            results["metadatas"][0],
+            results["distances"][0]
+        ),
+        start=1
     ):
+
+        if distance > DISTANCE_THRESHOLD:
+            continue
+
+        print(f"\nChunk {i}")
+        print(f"Source: {metadata['source']}")
+        print(f"Distance: {distance:.4f}")
+        print(f"Content:\n{document}")
+        print("-" * 60)
+
         context_parts.append(
             f"Source: {metadata['source']}\n{document}"
         )
 
+    # Check whether relevant context was found
+    if not context_parts:
+        print("No relevant chunks found.")
+        return "I don't have enough information in the documents."
+
     context = "\n\n".join(context_parts)
 
-    # 8. Create prompt
+    # 7. Create prompt
     prompt = f"""
     Answer the question using only the information
     provided in the context below.
 
     Give a clear and complete answer.
+    Do not include unrelated information.
+
     If the answer is not available in the context,
     say: "I don't have enough information in the documents."
 
@@ -72,13 +99,13 @@ def answer_question(question):
     Answer:
     """
 
-    # 9. Generate answer using Groq
+    # 8. Generate answer using Groq
     response = groq_client.chat.completions.create(
         model=MODEL_NAME,
         messages=[
             {
                 "role": "system",
-                "content": "You are a helpful document-based RAG assistant."
+                "content": "You are a helpful document-based RAG assistant. Answer only from the supplied context."
             },
             {
                 "role": "user",
@@ -92,7 +119,7 @@ def answer_question(question):
     return response.choices[0].message.content
 
 
-# 10. Ask questions continuously
+# 9. Ask questions continuously
 if __name__ == "__main__":
 
     print("\n===== BASIC RAG PIPELINE =====")
@@ -100,6 +127,7 @@ if __name__ == "__main__":
     print("Type 'exit' to stop.\n")
 
     while True:
+
         question = input("You: ").strip()
 
         if question.lower() == "exit":
@@ -110,10 +138,11 @@ if __name__ == "__main__":
             continue
 
         try:
-            answer = answer_question(question)
-            print("\nAI Answer:")
+            answer = query(question)
+
+            print("\n========== GENERATED ANSWER ==========")
             print(answer)
-            print("\n" + "=" * 50 + "\n")
+            print("\n" + "=" * 60 + "\n")
 
         except Exception as error:
             print("\nError:", error)

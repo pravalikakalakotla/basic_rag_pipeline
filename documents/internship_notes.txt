@@ -1,0 +1,44 @@
+AI AND INTERNSHIP LEARNING NOTES
+
+Learning Objective:
+Develop practical skills in Artificial Intelligence,
+Generative AI, Machine Learning and software
+development.
+
+Artificial Intelligence:
+AI enables machines to perform tasks that normally
+require human intelligence.
+
+Machine Learning:
+Machine Learning allows computers to learn patterns
+from data and make predictions.
+
+Generative AI:
+Generative AI models can create new content such
+as text, images and code.
+
+Retrieval-Augmented Generation:
+RAG combines information retrieval with a
+Large Language Model.
+
+A RAG Pipeline:
+1. Collect documents.
+2. Extract text.
+3. Split text into chunks.
+4. Convert chunks into embeddings.
+5. Store embeddings in a vector database.
+6. Retrieve relevant chunks for a question.
+7. Pass retrieved context to an LLM.
+8. Generate an answer.
+
+Technologies Being Learned:
+Python
+Sentence Transformers
+ChromaDB
+Groq API
+Vector Embeddings
+Large Language Models
+
+Learning Goal:
+Build practical AI applications and understand
+how retrieval-based AI systems work.

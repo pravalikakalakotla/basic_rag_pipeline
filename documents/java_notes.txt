@@ -1,0 +1,94 @@
+# JAVA PROGRAMMING NOTES
+
+## Introduction
+Java is a high-level, object-oriented programming language used to develop desktop applications, web applications, mobile applications and enterprise software.
+
+## Features of Java
+1. Object-oriented
+2. Platform-independent
+3. Simple and secure
+4. Robust and reliable
+5. Supports multithreading
+6. Automatic memory management
+
+## Basic Concepts
+
+**1. Variables:** Variables are used to store data values.
+
+Example:
+```java
+int age = 20;
+String name = "Pravalika";
+```
+
+**2. Data Types:** Java supports primitive data types such as int, float, double, char and boolean. It also supports non-primitive types such as String, arrays and classes.
+
+**3. Operators:** Operators perform arithmetic, comparison and logical operations.
+
+**4. Conditional Statements:** if, if-else and switch are used for decision-making.
+
+**5. Loops:** for, while and do-while loops execute statements repeatedly.
+
+**6. Methods:** Methods are reusable blocks of code that perform specific tasks.
+
+Example:
+```java
+static int add(int a, int b) {
+    return a + b;
+}
+```
+
+## Object-Oriented Programming
+
+Java supports four major principles of OOP:
+
+1. **Encapsulation:** Wrapping data and methods into a single unit.
+2. **Inheritance:** Acquiring properties and methods from another class.
+3. **Polymorphism:** Performing the same operation in different ways.
+4. **Abstraction:** Hiding implementation details and showing essential features.
+
+## Arrays
+
+An array stores multiple values of the same data type in a single variable.
+
+Example:
+```java
+int[] numbers = {10, 20, 30, 40};
+```
+
+Array indexing starts from zero.
+
+## Collections
+
+Java Collections provide data structures to store and manage groups of objects.
+
+Important collection types:
+
+- ArrayList
+- LinkedList
+- HashSet
+- HashMap
+
+## Exception Handling
+
+Exception handling manages runtime errors and prevents unexpected program termination.
+
+Important keywords:
+
+- try
+- catch
+- finally
+- throw
+- throws
+
+## Applications of Java
+
+1. Android application development
+2. Web application development
+3. Enterprise software
+4. Banking applications
+5. Desktop applications
+
+## Learning Goal
+
+Develop strong Java programming fundamentals, understand object-oriented programming and improve problem-solving skills for technical interviews and software development.

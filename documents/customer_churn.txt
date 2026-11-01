@@ -1,0 +1,63 @@
+CUSTOMER CHURN PREDICTION PROJECT
+
+Project Overview:
+Customer Churn Prediction is a machine learning
+project that predicts whether a customer is likely
+to leave a service or company.
+
+Objective:
+The main objective is to identify customers who
+may stop using a company's services. This helps
+businesses understand customer behavior and take
+steps to improve customer retention.
+
+Dataset:
+The project uses the IBM Telco Customer Churn
+dataset.
+
+The dataset contains 7043 rows and 21 columns.
+It includes customer information, services,
+contract details, payment methods and churn status.
+
+Data Preprocessing:
+The dataset was loaded using Pandas.
+Missing values in TotalCharges were handled.
+There were 11 missing TotalCharges values,
+all associated with customers having zero tenure.
+
+Machine Learning Algorithms:
+1. Logistic Regression
+2. Random Forest
+
+Model Results:
+Logistic Regression:
+Accuracy: 80.55%
+Precision: 65.72%
+Recall: 55.88%
+F1 Score: 60.40%
+ROC-AUC: 84.21%
+
+Random Forest:
+Accuracy: 78.28%
+F1 Score: 53.64%
+ROC-AUC: 82.32%
+
+Technology Stack:
+Python
+Pandas
+NumPy
+Scikit-learn
+Streamlit
+
+Deployment:
+The project was deployed using Streamlit Community
+Cloud.
+
+Live Demo:
+https://pravalika-churn-predictor.streamlit.app/
+
+Conclusion:
+This project demonstrates how machine learning
+can help businesses identify customers who may
+leave their services. Logistic Regression performed
+better than Random Forest in the evaluated results.

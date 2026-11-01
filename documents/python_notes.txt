@@ -1,0 +1,134 @@
+# PYTHON PROGRAMMING NOTES
+
+## Introduction
+Python is a high-level, interpreted, general-purpose programming language. It is widely used in web development, automation, data science, artificial intelligence and machine learning.
+
+## Features of Python
+
+1. Simple and easy to learn
+2. Interpreted programming language
+3. Object-oriented
+4. Open-source and free
+5. Platform-independent
+6. Supports multiple programming paradigms
+7. Large collection of libraries and frameworks
+
+## Basic Concepts
+
+**1. Variables:** Variables are used to store data values.
+
+Example:
+```python
+name = "Pravalika"
+age = 20
+```
+
+**2. Data Types:** Python supports several built-in data types:
+
+- int – Integer values
+- float – Decimal values
+- str – Text values
+- bool – True or False values
+- list – Ordered and changeable collection
+- tuple – Ordered and unchangeable collection
+- set – Unordered collection of unique elements
+- dict – Collection of key-value pairs
+
+**3. Operators:** Operators perform arithmetic, comparison, assignment and logical operations.
+
+**4. Conditional Statements:** if, elif and else statements are used for decision-making.
+
+Example:
+```python
+age = 20
+
+if age >= 18:
+    print("Eligible")
+else:
+    print("Not eligible")
+```
+
+**5. Loops:** Python provides for and while loops to execute statements repeatedly.
+
+Example:
+```python
+for i in range(1, 6):
+    print(i)
+```
+
+**6. Functions:** Functions are reusable blocks of code that perform specific tasks.
+
+Example:
+```python
+def add(a, b):
+    return a + b
+```
+
+## Object-Oriented Programming
+
+Python supports object-oriented programming through classes and objects.
+
+Important concepts:
+
+1. **Class:** A blueprint used to create objects.
+2. **Object:** An instance of a class.
+3. **Encapsulation:** Combining data and methods into a single unit.
+4. **Inheritance:** Creating a class using the properties of another class.
+5. **Polymorphism:** Using the same interface for different implementations.
+6. **Abstraction:** Hiding implementation details and showing essential features.
+
+## Data Structures
+
+Python provides several built-in data structures to organize and manage data.
+
+1. **List:** Stores an ordered and changeable collection of elements.
+2. **Tuple:** Stores an ordered and unchangeable collection.
+3. **Set:** Stores unique elements without duplicates.
+4. **Dictionary:** Stores data in key-value pairs.
+
+## Exception Handling
+
+Exception handling is used to manage runtime errors and prevent unexpected program termination.
+
+Important keywords:
+
+- try
+- except
+- else
+- finally
+- raise
+
+Example:
+```python
+try:
+    result = 10 / 0
+except ZeroDivisionError:
+    print("Cannot divide by zero")
+```
+
+## Modules and Libraries
+
+Modules contain reusable Python code. Libraries provide additional functionality for different applications.
+
+Some popular Python libraries:
+
+1. NumPy – Numerical computing
+2. Pandas – Data analysis and manipulation
+3. Matplotlib – Data visualization
+4. Scikit-learn – Machine learning
+5. TensorFlow – Deep learning
+6. PyTorch – Machine learning and deep learning
+
+## Applications of Python
+
+1. Web development
+2. Artificial Intelligence
+3. Machine Learning
+4. Data Science
+5. Automation and scripting
+6. Natural Language Processing
+7. Software development
+
+## Learning Goal
+
+Develop strong Python programming fundamentals, understand data structures and functions, and gain practical knowledge for artificial intelligence, machine learning and software development.

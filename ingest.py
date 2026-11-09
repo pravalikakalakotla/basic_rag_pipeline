@@ -2,31 +2,58 @@
 from pathlib import Path
 import chromadb
 from sentence_transformers import SentenceTransformer
+from pypdf import PdfReader
 from chunking import chunk_text
 
-# 1. Define document folder
+
 DOCUMENTS_FOLDER = Path("documents")
 
-# 2. Load the embedding model
 print("Loading embedding model...")
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 
-# 3. Read documents and create chunks
 all_chunks = []
 all_metadata = []
 all_ids = []
 
+document_count = 0
+
 print("\nReading documents...")
 
-for file_path in DOCUMENTS_FOLDER.glob("*.txt"):
+supported_extensions = [".txt", ".md", ".pdf"]
 
-    text = file_path.read_text(encoding="utf-8")
+for file_path in DOCUMENTS_FOLDER.iterdir():
 
+    if file_path.suffix.lower() not in supported_extensions:
+        continue
+
+    # Read TXT and Markdown files
+    if file_path.suffix.lower() in [".txt", ".md"]:
+        text = file_path.read_text(encoding="utf-8")
+
+    # Read PDF files
+    elif file_path.suffix.lower() == ".pdf":
+        pdf_reader = PdfReader(file_path)
+        text = ""
+
+        for page in pdf_reader.pages:
+            page_text = page.extract_text()
+
+            if page_text:
+                text += page_text + "\n"
+
+    if not text.strip():
+        print(f"Skipping empty document: {file_path.name}")
+        continue
+
+    document_count += 1
+
+    # Split text into chunks
     chunks = chunk_text(text)
 
     print(f"{file_path.name}: {len(chunks)} chunks")
 
     for index, chunk in enumerate(chunks):
+
         all_chunks.append(chunk)
 
         all_metadata.append({
@@ -36,17 +63,20 @@ for file_path in DOCUMENTS_FOLDER.glob("*.txt"):
 
         all_ids.append(f"{file_path.stem}_{index + 1}")
 
-# 4. Generate embeddings
-print("\nGenerating embeddings...")
 
+if not all_chunks:
+    print("No supported documents found!")
+    exit()
+
+
+print("\nCreating embeddings...")
 embeddings = embedding_model.encode(all_chunks).tolist()
 
-# 5. Connect to ChromaDB
-print("\nConnecting to ChromaDB...")
+
+print("\nUpdating ChromaDB...")
 
 client = chromadb.PersistentClient(path="chroma_db")
 
-# Recreate collection to avoid duplicate data on reruns
 try:
     client.delete_collection(name="rag_documents")
 except Exception:
@@ -54,7 +84,6 @@ except Exception:
 
 collection = client.create_collection(name="rag_documents")
 
-# 6. Store chunks, embeddings and metadata
 collection.add(
     ids=all_ids,
     documents=all_chunks,
@@ -62,6 +91,7 @@ collection.add(
     metadatas=all_metadata
 )
 
+
 print("\nIngestion completed successfully!")
-print("Total documents:", len(list(DOCUMENTS_FOLDER.glob("*.txt"))))
+print("Total documents:", document_count)
 print("Total chunks stored:", collection.count())

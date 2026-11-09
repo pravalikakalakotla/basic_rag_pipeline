@@ -2,33 +2,42 @@
 import chromadb
 from sentence_transformers import SentenceTransformer
 
-# Load the same embedding model
+# 1. Load the embedding model
+print("Loading embedding model...")
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
-# Connect to ChromaDB
+# 2. Connect to ChromaDB
 client = chromadb.PersistentClient(path="chroma_db")
 collection = client.get_collection(name="rag_documents")
 
-# Ask a question
-question = "What is Federated Learning?"
+# 3. Ask a question interactively
+question = input("\nEnter your question: ").strip()
 
-# Convert question into an embedding
+if not question:
+    print("Please enter a valid question.")
+    exit()
+
+# 4. Convert question into an embedding
 question_embedding = model.encode([question]).tolist()
 
-# Search for the 3 most relevant chunks
+# 5. Retrieve the top-4 most relevant chunks
 results = collection.query(
     query_embeddings=question_embedding,
-    n_results=3,
+    n_results=4,
     include=["documents", "metadatas", "distances"]
 )
 
-# Display retrieved results
-print("\nQuestion:", question)
-print("\nRetrieved relevant information:")
+# 6. Display retrieved chunks
+print("\n========== QUESTION ==========")
+print(question)
+
+print("\n========== RETRIEVED CHUNKS ==========")
 
 for i in range(len(results["documents"][0])):
-    print("\n-------------------------")
+    print(f"\n--- Chunk {i + 1} ---")
     print("Source:", results["metadatas"][0][i]["source"])
-    print("Distance:", results["distances"][0][i])
+    print("Distance:", round(results["distances"][0][i], 4))
     print("Content:")
     print(results["documents"][0][i])
+
+print("\n========== RETRIEVAL COMPLETED ==========")
